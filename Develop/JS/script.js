@@ -38,7 +38,9 @@ $(document).ready(function() {
     hourColumn.textContent = hourText;
 
     const textarea = document.createElement('textarea');
-    textarea.classList.add('form-control', 'col-8', 'col-md-10');
+    textarea.classList.add('col-8', 'col-md-10', 'description');
+    textarea.setAttribute('rows', '3')
+
 
     const saveBtn = document.createElement('button');
     saveBtn.classList.add('btn', 'saveBtn','col-2', 'col-md-1');
@@ -85,7 +87,7 @@ $(document).ready(function() {
       saveButtons.forEach(function (button) {
         button.addEventListener ('click', function () {
       
-          const textarea = this.parentNode.querySelector('.form-control');
+          const textarea = this.parentNode.querySelector('.time-block');
           const inputValue = textarea.value;
           const key = `user-input-${textarea.id}`;
           localStorage.setItem (key, inputValue);
@@ -93,7 +95,7 @@ $(document).ready(function() {
         });
       });
       
-      const textareas = document.querySelectorAll('.form-control');
+      const textareas = document.querySelectorAll('.time-block');
       
           textareas.forEach(function (textarea) {
             const savedInput = localStorage.getItem(`user-input-${textarea.id}`);
