@@ -5,10 +5,12 @@ $(document).ready(function() {
 
     }
 
+    const currentHour = getHour();
+
     function timeBlocks (hour, currentTime) {
       const timeBlock = document.createElement('div');
       timeBlock.id = `hour-${hour}`;
-      timeBlock.classList.add('row','timeblock');
+      timeBlock.classList.add('row','time-block');
     
 
     if (hour < currentTime) {
@@ -23,6 +25,8 @@ $(document).ready(function() {
         timeBlock.classList.add('future');
     }
 
+
+
     const hourColumn = document.createElement('div');
     hourColumn.classList.add('col-2', 'col-md-1', 'hour', 'text-center', 'py-3');
     hourColumn.textContent = `${hour}`;
@@ -35,7 +39,7 @@ $(document).ready(function() {
     saveBtn.setAttribute('aria-label', 'save');
 
     const saveIcon = document.createElement('i');
-    saveIcon.classList.add('fas','fa-save');
+    saveIcon.classList.add('fas', 'fa-save');
 
     saveBtn.appendChild(saveIcon);
     timeBlock.appendChild(hourColumn);
@@ -46,46 +50,50 @@ $(document).ready(function() {
 
   }
 
-  const currentHour = getHour();
-
-  const container = document.querySelector('.time-blocks');
+  const container = document.querySelector('.time-block');
 
   for (let hour = 9; hour <= 11; hour ++) {
     const timeBlock = timeBlocks (hour, currentHour);
-    container.appendChild (timeBlock);
-  }
-});
+
+    const hourId = parseInt (timeBlock.id.split('-')[1]);
+    if (hourId < currentHour) {
+      timeBlock.classList.remove('present', 'future');
+      timeBlock.classList.add('past');
+    }
+    else if (hourId > currentHour) {
+      timeBlock.classList.remove('past', 'present');
+      timeBlock.classList.add('future');
+    }
+  
+    else if (hourId === currentHour) {
+      timeBlock.classList.remove('past', 'future');
+      timeBlock.classList.add('present');
+    }
+
+
+  container.appendChild (timeBlock);
+
+}
 
 const saveButtons = document.querySelectorAll('.saveBtn');
 
 saveButtons.forEach(function (button) {
   button.addEventListener ('click', function () {
-    const textarea = this.parentNode.querySelector('text-area');
+
+    const textarea = this.parentNode.querySelector('.form-control');
     const inputValue = textarea.value;
     const key = `user-input-${textarea.id}`;
     localStorage.setItem (key, inputValue);
+
+  });
 });
 
-});
+const textareas = document.querySelectorAll('.form-control');
 
-
-
-  //
-  // TODO: Add code to apply the past, present, or future class to each time
-  // block by comparing the id to the current hour. HINTS: How can the id
-  // attribute of each time-block be used to conditionally add or remove the
-  // past, present, and future classes? How can Day.js be used to get the
-  // current hour in 24-hour time?
-
-  //
-  // TODO: Add code to get any user input that was saved in localStorage and set
-  // the values of the corresponding textarea elements. HINT: How can the index
-  // attribute of each time-block be used to do this?
-  //
-  // TODO: Add code to display the current date in the header of the page.
-
-
-  //What does `this` reference in the click listener
-  // function? How can DOM traversal be used to get the "hour-x" id of the
-  // time-block containing the button that was clicked? How might the id be
-  // useful when saving the description in local storage?
+    textareas.forEach(function (textarea) {
+      const savedInput = localStorage.getItem(`user-input-${textarea.id}`);
+      if (savedInput) {
+        textarea.value = savedInput;
+      }
+    });
+  });
