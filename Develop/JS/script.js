@@ -4,18 +4,18 @@ $(document).ready(function() {
   return dayjs().hour();
   }
 
-  function formatTime() {
-    return dayjs().format('hh:mm A');
+  function formatDateTime() {
+    return dayjs().format('MMMM DD, YYYY @ hh:mm A');
   }
 
   const currentHour = getHour();
 
-  const currentTime = formatTime();
+  const currentDate = formatDateTime();
 
   const currentDay = document.getElementById('currentDay');
-  const currentHourEl = document.createElement('p');
-  currentHourEl.textContent = currentTime;
-  currentDay.appendChild(currentHourEl);
+  const currentDateEl = document.createElement('p');
+  currentDateEl.textContent = currentDate;
+  currentDay.appendChild(currentDateEl);
 
   $('.time-block').each (function(){
     let timeBlock = parseInt ($(this).attr('id').split('-')[1])
